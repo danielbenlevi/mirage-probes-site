@@ -15,9 +15,14 @@
       <header class="title-block">
         <h1>When Visual Understanding Is Not Visual</h1>
         <p class="authors">
-          Daniel Ben-Levi<sup>1</sup><sup>y</sup>, Judah Goldfeder<sup>1</sup>, Weiliang Zhao<sup>1</sup>,
-          Raz Lapid<sup>2</sup>, Amit Levi<sup>3</sup>, Allen G Roush<sup>4</sup>,
-          Ravid Shwartz-Ziv<sup>5</sup>, Hod Lipson<sup>1</sup>
+          <span>Daniel Ben-Levi<sup>1</sup></span>
+          <span>Judah Goldfeder<sup>1</sup></span>
+          <span>Weiliang Zhao<sup>1</sup></span>
+          <span>Raz Lapid<sup>2</sup></span>
+          <span>Amit Levi<sup>3</sup></span>
+          <span>Allen G Roush<sup>4</sup></span>
+          <span>Ravid Shwartz-Ziv<sup>5</sup></span>
+          <span>Hod Lipson<sup>1</sup></span>
         </p>
         <p class="affiliations">
           <sup>1</sup> Columbia University &nbsp;&nbsp;
@@ -39,13 +44,29 @@
             <img src="assets/source/mirage_intro.png" alt="Intro figure from the paper" />
           </figure>
           <p>
-            Vision-language models can answer image-based questions confidently, and often
-            correctly, even when no image is provided. The paper treats this mirage behavior as
-            a benchmark inflation problem rather than a simple output error, and argues that it
-            splits into two mechanisms: textual biases, where the model answers from language
-            priors, and spurious images, where it constructs false visual content in latent
-            space. Mirage Probes is introduced as a contrastive probing framework to expose that
-            distinction inside the model rather than only at the output level.
+            Vision-language models are often evaluated by whether they answer image-based
+            questions correctly. However, VLMs can produce confident, often correct answers to
+            visual questions even when no image is provided, a behavior known as mirage. We
+            study whether that same mirage behavior leaves a detectable signature inside the
+            model even when images are provided.
+          </p>
+          <p>
+            Accordingly, we introduce Mirage Probes, a contrastive probing framework for
+            diagnosing these behaviors at the representation level. Across open-source VLMs and
+            multiple VQA benchmarks, we find that mirage-associated generations are linearly
+            decodable from image-present activations, including residual stream, MLP,
+            post-attention, and attention-head sites. Thus, we empirically demonstrate that
+            mirage mechanisms are still activate regardless of the presence of visual input.
+          </p>
+          <p>
+            Our findings indicate that mirage behavior is not a single failure mode. Some mirages
+            appear to come from textual biases, where the question alone gives the model enough
+            distributional evidence to answer without using the image. Others appear to come
+            from spurious images, where the model behaves as though unsupported visual content
+            exists in its latent representations. This distinction matters because the two
+            mechanisms imply different fixes: cleaning benchmark text distributions may reduce
+            textual shortcuts, but it is unlikely to eliminate mirages that arise from the
+            creation of spurious images.
           </p>
         </div>
       </section>
@@ -57,14 +78,28 @@
             <img src="assets/source/mirage_dataset.png" alt="Dataset construction figure" />
           </figure>
           <p>
-            Section 3.2 builds the probe datasets from paired with-image and without-image
-            responses. The paper compares the model's response with the image present and with
-            the image removed, then assigns a binary label indicating whether the with-image
-            response is mirage-like. The authors organize both contrastive and all-examples
-            pools across VQA-RAD, MMMU-Pro, and MedXpertQA. The contrastive setting keeps
-            paraphrased question variants with matched labels on the same image, while the
-            broader all-examples setting is filtered and split to support probe training and
-            baseline evaluation.
+            To study mirage behavior inside VLMs, we construct paired with-image conversation
+            datasets from model responses with and without the image. For each question, we
+            compare the model’s image-conditioned response to its image-absent response. If the
+            model gives essentially the same answer in both settings, we label the image-conditioned
+            response as mirage-like. If the image-absent response explicitly refuses or expresses
+            uncertainty because the image is missing, we label the corresponding image-conditioned
+            response as non-mirage-like.
+          </p>
+          <p>
+            General mirage labels can be confounded by superficial text patterns. To reduce this
+            problem, we build contrastive pairs. For each base image-question example, we generate
+            light paraphrases that preserve the original meaning while perturbing the wording. We
+            then keep cases where near-equivalent question variants produce both mirage-like and
+            non-mirage-like responses. This gives us pairs that share the same image and nearly
+            the same question semantics, but differ in mirage behavior.
+          </p>
+          <p>
+            We evaluate this framework on VQA-RAD, MMMU-Pro, and MedXpertQA. These benchmarks
+            vary in how much information the question text itself provides. That variation becomes
+            important later: datasets whose questions present rich distributional information
+            appear to induce different mirage mechanisms than datasets whose questions require
+            more specific visual evidence.
           </p>
         </div>
       </section>
@@ -76,13 +111,29 @@
             <img src="assets/source/mirage_activation.png" alt="Activation probing figure" />
           </figure>
           <p>
-            Sections 3.3 and 3.4 probe the model's internal activations with lightweight
-            classifiers. The authors test logistic regression probes on the residual stream,
-            MLP activations, concatenated layer activations, and activation differences, along
-            with probes over attention head and post-attention outputs. They compare these linear
-            probes to two-layer MLP probes and to a text-only Naive Bayes baseline. In addition,
-            they define the Prior Harnessing Index, or PHI, as a text-only measure of how much the
-            model can recover the correct answer from the question distribution alone.
+            We aim to determine whether or not mirage behavior is encoded in the model’s internal
+            activations. After generating a response, we feed the full image-question-response
+            conversation back through the VLM and extract activations from several sites: the
+            residual stream, MLP outputs, post-attention outputs, and individual attention heads.
+            We then train lightweight probes to predict whether a response was mirage-like or
+            non-mirage-like.
+          </p>
+          <p>
+            We compare several probing strategies. Linear probes test whether mirage behavior is
+            recoverable as a simple direction in representation space. Two-layer MLP probes test
+            whether the signal requires a nonlinear transformation. Concatenated-layer probes
+            test whether the signal is distributed across layers. Difference probes test whether
+            the representational shift caused by adding the image separates mirage-like from
+            non-mirage-like examples.
+          </p>
+          <p>
+            We also include text-only baselines to check whether the probes are merely exploiting
+            surface features in the generated responses. In particular, we train a Naive Bayes
+            classifier over response unigrams and bigrams. Finally, we introduce the Prior
+            Harnessing Index, or PHI, which measures how much the model’s confidence in the
+            correct answer increases from the question text alone. PHI helps distinguish cases
+            where the model believes it can answer from textual priors from cases where it must
+            rely on visual or visually evoked information.
           </p>
         </div>
       </section>
@@ -90,72 +141,64 @@
       <section class="section">
         <h2>Results</h2>
         <p>
-          The main experimental result is that mirage behavior is recoverable from internal
-          activations, and the contrastive setup reduces surface confounds enough to make that
-          signal meaningful. In Table 1, difference probes are the strongest across both Ovis and
-          Qwen, while residual and attention probes remain clearly above chance in the contrastive
-          setting. The all-examples setting is often higher, but it is also more likely to reflect
-          shallow cues rather than the mechanism of interest.
+          We find that mirage behavior is consistently recoverable from image-present latent
+          activations. Linear probes achieve above-chance accuracy across residual stream, MLP,
+          post-attention, and attention-head targets in both Ovis and Qwen. Two-layer MLP probes
+          do not meaningfully outperform linear probes, suggesting that the relevant signal is
+          not hidden behind a complex nonlinear transformation. Difference probes are especially
+          strong, motivating their use as classifiers.
         </p>
         <figure class="table-figure">
           <img
             src="assets/source/mirage_results_1.png"
             alt="Residual and attention probing results"
           />
-          <figcaption>Table 1. Residual and attention probing results.</figcaption>
         </figure>
 
         <p>
-          Table 2 shows why the authors emphasize the contrastive construction. The Naive Bayes
-          baseline is consistently weaker than the probing models, which supports the claim that
-          the probes are not just reading off unigram or bigram response features. The paper uses
-          this gap to argue that mirage behavior is encoded in the representation space rather
-          than being reducible to surface lexical patterns.
+          The contrastive construction is crucial. Text-only Naive Bayes classifiers perform
+          substantially worse in the contrastive setting, while representation probes remain
+          strong. This suggests that our contrastive probes are not simply detecting shallow
+          lexical artifacts in the model’s responses.
         </p>
         <figure class="table-figure">
           <img
             src="assets/source/mirage_results_2.png"
             alt="Naive Bayes classifier results"
           />
-          <figcaption>Table 2. Naive Bayes classifier.</figcaption>
         </figure>
 
         <p>
-          Table 3 separates the datasets by perceived image reliance. VQA-RAD contains the clearest
-          image-reliant pattern, while MMMU-Pro and MedXpertQA show a much larger share of examples
-          that can be answered from text alone. This benchmark-level difference is one reason the
-          paper argues for two regimes: textual bias and spurious images do not behave the same
-          way under probing.
+          Benchmark-level patterns point to two different mirage regimes. Some mirages appear to
+          reflect textual biases, where the model can extract enough answer-relevant information
+          from the question alone. Others appear to reflect spurious images, where the model
+          behaves as though unsupported visual content exists in its internal representations.
+          Crucially, this distinction is not fully captured by human judgments of whether a
+          question requires an image: what matters is how much useful information the model
+          itself can extract from the text distribution. Our PHI analysis supports this view,
+          suggesting that mirage mechanisms depend jointly on the question’s apparent visual
+          dependence and the model’s own ability to harness textual priors.
         </p>
         <figure class="table-figure">
           <img
             src="assets/source/mirage_results_3.png"
             alt="Image reliance per benchmark"
           />
-          <figcaption>Table 3. Image reliance per benchmark.</figcaption>
         </figure>
 
-        <p>
-          Table 4 connects PHI to the mirage labels and compares reliance-conditioned training.
-          VQA-RAD is the benchmark where low PHI and mirage behavior are most tightly connected,
-          which matches the paper's claim that some mirages arise from latent visual assumptions
-          rather than only from text priors. The reliance-conditioned experiment does not fully
-          eliminate the gap, which reinforces the conclusion that text-only cleaning can help one
-          regime but not the other.
-        </p>
         <figure class="table-figure">
           <img
             src="assets/source/mirage_results_4.png"
             alt="PHI and reliance-conditioned training results"
           />
-          <figcaption>Table 4. PHI and reliance-conditioned training.</figcaption>
         </figure>
 
         <p>
-          Taken together, the results support the paper's conclusion that mirage behavior is not a
-          single failure mode. Contrastive probes recover a linearly decodable signal, Naive Bayes
-          remains weaker, and benchmark differences suggest that textual priors and spurious
-          images are distinct mechanisms that require different interventions.
+          Together, these results suggest that mirage behavior should not be treated as a single
+          output-level pathology. Some mirages can plausibly be mitigated by reducing textual
+          shortcuts, but others appear to live in the model’s internal visual representations.
+          Improving faithful grounding will therefore require representational diagnostics and
+          interventions, not only cleaner benchmarks or better prompting.
         </p>
       </section>
     </main>

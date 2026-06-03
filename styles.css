@@ -47,7 +47,7 @@ a {
 h1 {
   margin: 0 0 14px;
   font-family: Georgia, "Times New Roman", Times, serif;
-  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+  font-size: clamp(2rem, 3.3vw, 3.1rem);
   line-height: 1.05;
 }
 
@@ -60,10 +60,19 @@ h1 {
 
 .authors {
   margin-bottom: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 18px;
+  line-height: 1.8;
 }
 
 .affiliations {
   color: var(--muted);
+}
+
+.authors span {
+  white-space: nowrap;
 }
 
 .button-row {
@@ -136,9 +145,7 @@ h2 {
 }
 
 figcaption {
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 0.94rem;
+  display: none;
 }
 
 p {
