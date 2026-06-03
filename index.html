@@ -5,401 +5,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Paper website for When Visual Understanding Is Not Visual, a study of Mirage Probes for diagnosing mirage behavior in vision-language models."
+      content="Paper website for When Visual Understanding Is Not Visual."
     />
-    <meta name="theme-color" content="#f3eee3" />
-    <title>When Visual Understanding Is Not Visual | Mirage Probes</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%230f172a'/%3E%3Cstop offset='1' stop-color='%23f97316'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M15 35c7-10 27-10 34 0-7 10-27 10-34 0Zm17-12c4 0 7 3 7 7s-3 7-7 7-7-3-7-7 3-7 7-7Z' fill='white' fill-opacity='.92'/%3E%3C/svg%3E" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <title>When Visual Understanding Is Not Visual</title>
     <link rel="stylesheet" href="styles.css" />
-    <script defer src="script.js"></script>
   </head>
   <body>
-    <div class="ambient ambient-a"></div>
-    <div class="ambient ambient-b"></div>
-    <div class="mesh"></div>
+    <main class="paper">
+      <header class="title-block">
+        <h1>When Visual Understanding Is Not Visual</h1>
+        <p class="authors">
+          Daniel Ben-Levi<sup>1</sup><sup>y</sup>, Judah Goldfeder<sup>1</sup>, Weiliang Zhao<sup>1</sup>,
+          Raz Lapid<sup>2</sup>, Amit Levi<sup>3</sup>, Allen G Roush<sup>4</sup>,
+          Ravid Shwartz-Ziv<sup>5</sup>, Hod Lipson<sup>1</sup>
+        </p>
+        <p class="affiliations">
+          <sup>1</sup> Columbia University &nbsp;&nbsp;
+          <sup>2</sup> Intuit &nbsp;&nbsp;
+          <sup>3</sup> Technion &nbsp;&nbsp;
+          <sup>4</sup> Thoughtworks &nbsp;&nbsp;
+          <sup>5</sup> New York University
+        </p>
+        <div class="button-row">
+          <a class="button" href="assets/mirage-probes.pdf" target="_blank" rel="noreferrer">Paper</a>
+          <button class="button button-disabled" type="button" disabled>Code</button>
+        </div>
+      </header>
 
-    <header class="topbar">
-      <a class="brand" href="#top">
-        <span class="brand-mark">MP</span>
-        <span class="brand-text">
-          <strong>Mirage Probes</strong>
-          <small>Paper website</small>
-        </span>
-      </a>
-      <nav class="nav">
-        <a href="#abstract">Abstract</a>
-        <a href="#framework">Framework</a>
-        <a href="#mechanisms">Mechanisms</a>
-        <a href="#figures">Figures</a>
-        <a href="#results">Results</a>
-        <a href="#citation">BibTeX</a>
-      </nav>
-      <a class="button button-ghost" href="assets/mirage-probes.pdf" target="_blank" rel="noreferrer">
-        Read PDF
-      </a>
-      <a
-        class="button button-ghost button-placeholder"
-        href="#"
-        data-placeholder="true"
-        aria-disabled="true"
-        title="Code link coming soon"
-      >
-        Code
-      </a>
-    </header>
-
-    <main id="top" class="page-shell">
-      <section class="hero section-card reveal">
-        <div class="hero-copy">
-          <p class="eyebrow">Preprint, 2026</p>
-          <h1>When Visual Understanding Is Not Visual</h1>
-          <p class="hero-lede">
-            Mirage Probes studies a failure mode in vision-language models where the model answers
-            image-grounded questions confidently even when the image is missing. The paper argues
-            that this is not one behavior, but two: textual bias and spurious image generation.
+      <section class="section">
+        <h2>Overview</h2>
+        <div class="section-content">
+          <figure class="figure">
+            <img src="assets/source/mirage_intro.png" alt="Intro figure from the paper" />
+          </figure>
+          <p>
+            Vision-language models can answer image-based questions confidently, and often
+            correctly, even when no image is provided. The paper treats this mirage behavior as
+            a benchmark inflation problem rather than a simple output error, and argues that it
+            splits into two mechanisms: textual biases, where the model answers from language
+            priors, and spurious images, where it constructs false visual content in latent
+            space. Mirage Probes is introduced as a contrastive probing framework to expose that
+            distinction inside the model rather than only at the output level.
           </p>
-
-          <div class="hero-actions">
-            <a class="button button-primary" href="assets/mirage-probes.pdf" target="_blank" rel="noreferrer">
-              Open paper PDF
-            </a>
-            <a class="button button-secondary" href="#citation">Cite this work</a>
-          </div>
-
-          <div class="meta-grid">
-            <div>
-              <span class="meta-label">Authors</span>
-              <span class="meta-value">Daniel Ben-Levi, Judah Goldfeder, Weiliang Zhao, Raz Lapid, Amit Levi, Allen G Roush, Ravid Shwartz-Ziv, Hod Lipson</span>
-            </div>
-            <div>
-              <span class="meta-label">Affiliations</span>
-              <span class="meta-value">Columbia, Intuit, Technion, Thoughtworks, NYU</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-visual" aria-label="Mirage Probes illustration">
-          <div class="orb orb-1"></div>
-          <div class="orb orb-2"></div>
-          <div class="panel panel-top">
-            <span class="panel-kicker">Signal</span>
-            <span class="panel-title">Mirage behavior is linearly decodable</span>
-            <div class="mini-bars" aria-hidden="true">
-              <span style="height: 42%"></span>
-              <span style="height: 68%"></span>
-              <span style="height: 56%"></span>
-              <span style="height: 81%"></span>
-              <span style="height: 63%"></span>
-            </div>
-          </div>
-          <div class="panel panel-bottom">
-            <div class="signal-row">
-              <span>Textual bias</span>
-              <strong>Question priors</strong>
-            </div>
-            <div class="signal-row">
-              <span>Spurious image</span>
-              <strong>False visual content</strong>
-            </div>
-            <div class="signal-row">
-              <span>Probe type</span>
-              <strong>Contrastive logistic regression</strong>
-            </div>
-          </div>
         </div>
       </section>
 
-      <section class="stats-grid reveal">
-        <article class="stat-card">
-          <span class="stat-label">Benchmarks</span>
-          <strong>VQA-RAD, MMMU-Pro, MedXpertQA</strong>
-          <p>Three datasets with increasingly difficult textual shortcuts and differing image reliance.</p>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">Models</span>
-          <strong>Ovis and Qwen</strong>
-          <p>Two open-source VLMs used to test whether mirage behavior is encoded internally.</p>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">Main finding</span>
-          <strong>Two mechanisms, not one</strong>
-          <p>Textual bias and spurious images separate across benchmarks and imply different fixes.</p>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">Probe signal</span>
-          <strong>45% to 66% contrastive, 67% to 81% all-examples</strong>
-          <p>Contrastive probes reduce surface confounds while remaining above chance.</p>
-        </article>
-      </section>
-
-      <section id="abstract" class="section-card reveal">
-        <div class="section-heading">
-          <p class="eyebrow">Abstract</p>
-          <h2>What the paper shows</h2>
-        </div>
-        <div class="two-col">
-          <div class="prose">
-            <p>
-              The paper argues that a VLM can appear visually grounded while actually relying on
-              language priors or internally fabricated visual content. To test that hypothesis,
-              the authors introduce Mirage Probes, a contrastive probing setup that compares
-              paraphrased questions with matched mirage and non-mirage labels on the same image.
-            </p>
-            <p>
-              Across the probe suite, mirage behavior is recoverable from internal activations in
-              the residual stream, MLP blocks, post-attention outputs, and attention heads.
-              A naive Bayes text baseline is weaker, which supports the claim that the signal is
-              not just a lexical artifact.
-            </p>
-          </div>
-          <div class="callout">
-            <h3>Practical implication</h3>
-            <p>
-              Text distribution cleaning can help with the textual-bias regime, but it will not
-              address spurious images because that failure mode lives in the model's visual
-              representations.
-            </p>
-            <div class="callout-pill">Representation-level intervention needed</div>
-          </div>
-        </div>
-      </section>
-
-      <section id="framework" class="section-card reveal">
-        <div class="section-heading">
-          <p class="eyebrow">Framework</p>
-          <h2>Mirage Probes</h2>
-        </div>
-        <div class="pipeline">
-          <div class="pipeline-node">
-            <span class="node-index">1</span>
-            <h3>Same image, two prompt variants</h3>
-            <p>Each example pairs paraphrased questions with matched mirage and non-mirage labels.</p>
-          </div>
-          <div class="pipeline-arrow" aria-hidden="true"></div>
-          <div class="pipeline-node">
-            <span class="node-index">2</span>
-            <h3>Probe internal activations</h3>
-            <p>Logistic probes inspect residual stream, MLP, post-attention, and attention-head sites.</p>
-          </div>
-          <div class="pipeline-arrow" aria-hidden="true"></div>
-          <div class="pipeline-node">
-            <span class="node-index">3</span>
-            <h3>Separate two regimes</h3>
-            <p>Cross-benchmark patterns distinguish textual bias from spurious-image generation.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="mechanisms" class="section-card reveal">
-        <div class="section-heading">
-          <p class="eyebrow">Mechanisms</p>
-          <h2>The paper decomposes mirage behavior into two regimes</h2>
-        </div>
-        <div class="mechanism-grid">
-          <article class="mechanism-card mechanism-card-warm">
-            <h3>Textual bias</h3>
-            <p>
-              The model answers from language priors, dataset regularities, or benchmark shortcuts
-              without really engaging the image.
-            </p>
-            <ul>
-              <li>Best addressed with text-distribution cleaning</li>
-              <li>High confidence can still be unsupported</li>
-              <li>Often exposed by PHI and cross-benchmark shifts</li>
-            </ul>
-          </article>
-          <article class="mechanism-card mechanism-card-cool">
-            <h3>Spurious images</h3>
-            <p>
-              The model constructs false visual content in latent space and behaves as though that
-              content were real.
-            </p>
-            <ul>
-              <li>Needs representation-level intervention</li>
-              <li>Cannot be removed by text-only filtering</li>
-              <li>Shows up as image-reliant mirage behavior</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section id="figures" class="section-card reveal">
-        <div class="section-heading">
-          <p class="eyebrow">Figures</p>
-          <h2>Source figures from the paper</h2>
-        </div>
-        <div class="figure-grid">
-          <figure class="figure-card figure-card-wide">
-            <div class="figure-card-head">
-              <span class="figure-label">Dataset</span>
-              <a href="assets/source/dataset2.pdf" target="_blank" rel="noreferrer">Open PDF</a>
-            </div>
-            <object class="asset-pdf" data="assets/source/dataset2.pdf" type="application/pdf">
-              <p>
-                <a href="assets/source/dataset2.pdf" target="_blank" rel="noreferrer">Open the dataset figure PDF</a>
-              </p>
-            </object>
-            <figcaption>Dataset construction and mechanism examples.</figcaption>
+      <section class="section">
+        <h2>Dataset</h2>
+        <div class="section-content">
+          <figure class="figure">
+            <img src="assets/source/mirage_dataset.png" alt="Dataset construction figure" />
           </figure>
-          <figure class="figure-card">
-            <div class="figure-card-head">
-              <span class="figure-label">Example</span>
-              <a href="assets/source/example2.pdf" target="_blank" rel="noreferrer">Open PDF</a>
-            </div>
-            <object class="asset-pdf" data="assets/source/example2.pdf" type="application/pdf">
-              <p>
-                <a href="assets/source/example2.pdf" target="_blank" rel="noreferrer">Open the example figure PDF</a>
-              </p>
-            </object>
-            <figcaption>Prompted examples used to illustrate mirage behavior.</figcaption>
-          </figure>
-          <figure class="figure-card">
-            <div class="figure-card-head">
-              <span class="figure-label">Probe</span>
-              <a href="assets/source/probe2.pdf" target="_blank" rel="noreferrer">Open PDF</a>
-            </div>
-            <object class="asset-pdf" data="assets/source/probe2.pdf" type="application/pdf">
-              <p>
-                <a href="assets/source/probe2.pdf" target="_blank" rel="noreferrer">Open the probe figure PDF</a>
-              </p>
-            </object>
-            <figcaption>Probe construction and analysis flow.</figcaption>
-          </figure>
+          <p>
+            Section 3.2 builds the probe datasets from paired with-image and without-image
+            responses. The paper compares the model's response with the image present and with
+            the image removed, then assigns a binary label indicating whether the with-image
+            response is mirage-like. The authors organize both contrastive and all-examples
+            pools across VQA-RAD, MMMU-Pro, and MedXpertQA. The contrastive setting keeps
+            paraphrased question variants with matched labels on the same image, while the
+            broader all-examples setting is filtered and split to support probe training and
+            baseline evaluation.
+          </p>
         </div>
       </section>
 
-      <section class="section-card reveal">
-        <div class="section-heading">
-          <p class="eyebrow">Paper Diagram</p>
-          <h2>Conceptual overview</h2>
-        </div>
-        <div class="diagram">
-          <div class="diagram-column">
-            <div class="diagram-card">
-              <span class="diagram-label">With image</span>
-              <p>Question and image flow into the VLM.</p>
-            </div>
-            <div class="diagram-card">
-              <span class="diagram-label">Without image</span>
-              <p>The same question is rerun with the image removed.</p>
-            </div>
-          </div>
-          <div class="diagram-center">
-            <div class="diagram-core">
-              <div class="diagram-ring diagram-ring-a"></div>
-              <div class="diagram-ring diagram-ring-b"></div>
-              <div class="diagram-core-text">
-                <strong>Shared latent space</strong>
-                <span>Contrastive probes read out the mirage signal</span>
-              </div>
-            </div>
-          </div>
-          <div class="diagram-column">
-            <div class="diagram-card">
-              <span class="diagram-label">Linear readout</span>
-              <p>Residual stream, MLP, post-attention, and head sites remain decodable.</p>
-            </div>
-            <div class="diagram-card">
-              <span class="diagram-label">Interpretation</span>
-              <p>Mirage behavior can arise from either textual bias or spurious imagery.</p>
-            </div>
-          </div>
+      <section class="section">
+        <h2>Probing</h2>
+        <div class="section-content">
+          <figure class="figure">
+            <img src="assets/source/mirage_activation.png" alt="Activation probing figure" />
+          </figure>
+          <p>
+            Sections 3.3 and 3.4 probe the model's internal activations with lightweight
+            classifiers. The authors test logistic regression probes on the residual stream,
+            MLP activations, concatenated layer activations, and activation differences, along
+            with probes over attention head and post-attention outputs. They compare these linear
+            probes to two-layer MLP probes and to a text-only Naive Bayes baseline. In addition,
+            they define the Prior Harnessing Index, or PHI, as a text-only measure of how much the
+            model can recover the correct answer from the question distribution alone.
+          </p>
         </div>
       </section>
 
-      <section id="results" class="section-card reveal">
-        <div class="section-heading">
-          <p class="eyebrow">Results</p>
-          <h2>What stands out in the experiments</h2>
-        </div>
-        <div class="result-grid">
-          <article class="result-card">
-            <h3>Contrastive probes stay above chance</h3>
-            <p>
-              The contrastive setup reduces surface-level confounds while still exposing a
-              recoverable signal in internal activations.
-            </p>
-          </article>
-          <article class="result-card">
-            <h3>Naive Bayes is weaker</h3>
-            <p>
-              A text-only baseline fails to recover the same pattern, which argues against a
-              purely lexical explanation.
-            </p>
-          </article>
-          <article class="result-card">
-            <h3>VQA-RAD behaves differently</h3>
-            <p>
-              Benchmark patterns suggest that VQA-RAD contains more image-reliant examples, which
-              helps separate the spurious-image regime from text priors.
-            </p>
-          </article>
-          <article class="result-card">
-            <h3>PHI adds an interpretable axis</h3>
-            <p>
-              Prior Harnessing Index estimates how much answer confidence comes from text alone,
-              and it correlates with mirage behavior in the most image-dependent benchmark.
-            </p>
-          </article>
-        </div>
+      <section class="section">
+        <h2>Results</h2>
+        <p>
+          The main experimental result is that mirage behavior is recoverable from internal
+          activations, and the contrastive setup reduces surface confounds enough to make that
+          signal meaningful. In Table 1, difference probes are the strongest across both Ovis and
+          Qwen, while residual and attention probes remain clearly above chance in the contrastive
+          setting. The all-examples setting is often higher, but it is also more likely to reflect
+          shallow cues rather than the mechanism of interest.
+        </p>
+        <figure class="table-figure">
+          <img
+            src="assets/source/mirage_results_1.png"
+            alt="Residual and attention probing results"
+          />
+          <figcaption>Table 1. Residual and attention probing results.</figcaption>
+        </figure>
 
-        <div class="tables-grid" role="region" aria-label="Reported result tables">
-          <figure class="table-card">
-            <img src="assets/source/mirage_results_1.png" alt="Result table 1 showing residual and attention probing accuracies" />
-            <figcaption>Table 1. Residual and attention probing results.</figcaption>
-          </figure>
-          <figure class="table-card">
-            <img src="assets/source/mirage_results_2.png" alt="Result table 2 showing naive Bayes classifier performance" />
-            <figcaption>Table 2. Naive Bayes classifier.</figcaption>
-          </figure>
-          <figure class="table-card">
-            <img src="assets/source/mirage_results_3.png" alt="Result table 3 showing image reliance counts by benchmark" />
-            <figcaption>Table 3. Image reliance per benchmark.</figcaption>
-          </figure>
-          <figure class="table-card">
-            <img src="assets/source/mirage_results_4.png" alt="Result table 4 showing PHI correlation and reliance-conditioned training results" />
-            <figcaption>Table 4. PHI and reliance-conditioned training.</figcaption>
-          </figure>
-        </div>
-        <div class="results-note">
-          The tables are embedded directly from the source figure assets so the website mirrors the paper's reported results.
-        </div>
+        <p>
+          Table 2 shows why the authors emphasize the contrastive construction. The Naive Bayes
+          baseline is consistently weaker than the probing models, which supports the claim that
+          the probes are not just reading off unigram or bigram response features. The paper uses
+          this gap to argue that mirage behavior is encoded in the representation space rather
+          than being reducible to surface lexical patterns.
+        </p>
+        <figure class="table-figure">
+          <img
+            src="assets/source/mirage_results_2.png"
+            alt="Naive Bayes classifier results"
+          />
+          <figcaption>Table 2. Naive Bayes classifier.</figcaption>
+        </figure>
+
+        <p>
+          Table 3 separates the datasets by perceived image reliance. VQA-RAD contains the clearest
+          image-reliant pattern, while MMMU-Pro and MedXpertQA show a much larger share of examples
+          that can be answered from text alone. This benchmark-level difference is one reason the
+          paper argues for two regimes: textual bias and spurious images do not behave the same
+          way under probing.
+        </p>
+        <figure class="table-figure">
+          <img
+            src="assets/source/mirage_results_3.png"
+            alt="Image reliance per benchmark"
+          />
+          <figcaption>Table 3. Image reliance per benchmark.</figcaption>
+        </figure>
+
+        <p>
+          Table 4 connects PHI to the mirage labels and compares reliance-conditioned training.
+          VQA-RAD is the benchmark where low PHI and mirage behavior are most tightly connected,
+          which matches the paper's claim that some mirages arise from latent visual assumptions
+          rather than only from text priors. The reliance-conditioned experiment does not fully
+          eliminate the gap, which reinforces the conclusion that text-only cleaning can help one
+          regime but not the other.
+        </p>
+        <figure class="table-figure">
+          <img
+            src="assets/source/mirage_results_4.png"
+            alt="PHI and reliance-conditioned training results"
+          />
+          <figcaption>Table 4. PHI and reliance-conditioned training.</figcaption>
+        </figure>
+
+        <p>
+          Taken together, the results support the paper's conclusion that mirage behavior is not a
+          single failure mode. Contrastive probes recover a linearly decodable signal, Naive Bayes
+          remains weaker, and benchmark differences suggest that textual priors and spurious
+          images are distinct mechanisms that require different interventions.
+        </p>
       </section>
-
-      <section id="citation" class="section-card reveal">
-        <div class="section-heading">
-          <p class="eyebrow">BibTeX</p>
-          <h2>How to cite</h2>
-        </div>
-        <div class="bibtex-toolbar">
-          <button class="button button-secondary" type="button" data-copy="#bibtex">Copy BibTeX</button>
-          <span class="copy-status" aria-live="polite"></span>
-        </div>
-        <pre id="bibtex" class="bibtex"><code>@article{benlevi2026mirageprobes,
-  title={When Visual Understanding Is Not Visual},
-  author={Ben-Levi, Daniel and Goldfeder, Judah and Zhao, Weiliang and Lapid, Raz and Levi, Amit and Roush, Allen G and Shwartz-Ziv, Ravid and Lipson, Hod},
-  year={2026},
-  note={Preprint}
-}</code></pre>
-      </section>
-
-      <footer class="footer reveal">
-        <div>
-          <strong>Mirage Probes</strong>
-          <p>Static paper website adapted from the reference layout and tailored to this paper.</p>
-        </div>
-        <div class="footer-links">
-          <a href="assets/mirage-probes.pdf" target="_blank" rel="noreferrer">Paper PDF</a>
-          <a href="https://github.com/danielbenlevi/mirage-probes-site" target="_blank" rel="noreferrer">Source repository</a>
-          <a href="mailto:db3651@columbia.edu">Contact</a>
-        </div>
-      </footer>
     </main>
   </body>
 </html>
