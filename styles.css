@@ -63,17 +63,21 @@ h1 {
 }
 
 .authors {
+  display: grid;
   margin-bottom: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0 18px;
   line-height: 1.8;
 }
 
 .affiliations {
   color: var(--muted);
   font-size: 1.04rem;
+}
+
+.authors-line {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0 18px;
 }
 
 .authors span {
@@ -203,6 +207,11 @@ sup {
   .affiliations {
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .authors-line {
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   h2 {
