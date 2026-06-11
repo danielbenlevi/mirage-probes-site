@@ -209,9 +209,15 @@ sup {
     margin-right: 0;
   }
 
-  .authors-line {
-    justify-content: flex-start;
+  .authors {
+    display: flex;
     flex-wrap: wrap;
+    gap: 0 18px;
+    justify-content: flex-start;
+  }
+
+  .authors-line {
+    display: contents;
   }
 
   h2 {
