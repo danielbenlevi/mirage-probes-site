@@ -51,11 +51,15 @@ h1 {
   line-height: 1.05;
 }
 
+.title-line {
+  display: block;
+}
+
 .authors,
 .affiliations {
   margin: 0 auto;
   max-width: 1000px;
-  font-size: 1rem;
+  font-size: 1.08rem;
 }
 
 .authors {
@@ -69,6 +73,7 @@ h1 {
 
 .affiliations {
   color: var(--muted);
+  font-size: 1.04rem;
 }
 
 .authors span {
@@ -87,6 +92,7 @@ h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   min-width: 110px;
   padding: 10px 16px;
   border: 1px solid #222;
@@ -104,6 +110,18 @@ h1 {
   color: #777;
   border-color: #bbb;
   cursor: not-allowed;
+}
+
+.button-icon {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 1rem;
+}
+
+.button-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .section {
@@ -167,6 +185,14 @@ sup {
   .title-block {
     text-align: left;
     margin-bottom: 28px;
+  }
+
+  .title-line {
+    display: inline;
+  }
+
+  .title-line-second::before {
+    content: " ";
   }
 
   .button-row {
